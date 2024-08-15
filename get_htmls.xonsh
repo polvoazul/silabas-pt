@@ -1,0 +1,16 @@
+# run with xonsh
+
+def dl(letter):
+     offset = 0
+     while True:
+         url = f"http://www.portaldalinguaportuguesa.org/index.php?action=syllables&act=list&letter={letter}&start={offset:07}"
+         filename = f"{letter}_{offset:07}.html"
+         offset += 100
+         if !(ls @(filename)): continue
+         curl @(url) > @(filename)
+         if not !(egrep 'title=.Palavra.' @(filename)):
+             rm @(filename)
+             break
+
+for i in 'qwertyuiopasdfghjklzxcvbnm':
+    dl(i)
